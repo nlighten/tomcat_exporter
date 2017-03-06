@@ -1,5 +1,5 @@
-# Prometheus Tomcat Client
-A set of collectors that can be used to monitor Tomcat instances.
+# Prometheus Tomcat Exporter
+A set of collectors that can be used to monitor Apache Tomcat instances.
 
 
 ### Available metrics
@@ -13,8 +13,8 @@ The following Tomcat related metrics are provided:
 * Servlet response time metrics 
 * Database response time metrics
 
-### Using
-If you are running Tomcat in the conventional non-embedded setup the recommended way is to add the following jars to dependencies (see `pom.xml`) to the `$CATALINA_BASE/lib` directory or another directory on the `common.loader` path.
+### Using this library
+If you are running Tomcat in the conventional non-embedded setup we recommended to add the following jars (see `pom.xml`) to the `$CATALINA_BASE/lib` directory or another directory on the Tomcat `common.loader` path.
 Using the `common.loader` is important as we need to make sure that all metrics are registered using the same class loader.
 
 * simpleclient
@@ -23,28 +23,7 @@ Using the `common.loader` is important as we need to make sure that all metrics 
 * simpleclient_hotspot
 * simpleclient_tomcat
 
-Next, create a servlet with the exporters you want, package it as `metrics.war` and add it to the webapps directory. Typically you will extend the MetricsServlet and register the hotspot metrics, the generic tomcat metrics and metrics for the database connection pool.
-
-The following example assumes that you are using the [Tomcat JDBC Pool](http://tomcat.apache.org/tomcat-8.5-doc/jdbc-pool.html). If you are using DBCP2 pool you should change the exporter to TomcatDbcp2PoolExports class.
-
-```java
-import io.prometheus.client.exporter.MetricsServlet;
-import io.prometheus.client.hotspot.DefaultExports;
-import javax.servlet.ServletConfig;
-
-@WebServlet("/")
-public class TomcatMetricsServlet extends MetricsServlet {
-
-    @Override
-    public void init(ServletConfig config) {
-        DefaultExports.initialize();
-        new TomcatGenericExports(false).register();
-        new TomcatJdbcPoolExports().register();
-    }
-}
-```
-
-> NOTE: Make sure that the `metrics.war` does not contain any of the jars mentioned above as they need to be on Tomcats `common.loader` classpath.
+Next, add the `metrics.war` to the webapps directory of Tomcat. After restart of tomcat you should be able to access metrics via the `/metrics/` endpoint.   
 
 ### Servlet response time metrics
 If you want servlet response time metrics you can configure the `TomcatServletMetricsFilter` by adding it to the $CATALINA_BASE/lib/web.xml as shown below. There is no need to modify already deployed applications.
@@ -52,7 +31,7 @@ If you want servlet response time metrics you can configure the `TomcatServletMe
 ```xml
 <filter>
   <filter-name>ServletMetricsFilter</filter-name>
-  <filter-class>TomcatServletMetricsFilter</filter-class>
+  <filter-class>nl.nlighten.prometheus.tomcat.TomcatServletMetricsFilter</filter-class>
   <async-supported>true</async-supported>
   <init-param>
     <param-name>buckets</param-name>
@@ -106,6 +85,4 @@ If you run Tomcat in embedded mode, please look at the `AbstractTomcatMetricsTes
 ### Javadocs
 There are canonical examples defined in the class definition Javadoc of the client packages.
 
-Documentation can be found at the [Java Client
-Github Project Page](http://prometheus.github.io/client_java/simpleclient_tomcat).
 

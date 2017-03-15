@@ -133,7 +133,7 @@ public class TomcatGenericExports extends Collector {
             Set<ObjectInstance> mBeans = server.queryMBeans(filterName, null);
 
             if (mBeans.size() > 0) {
-                List<String> labelNameList = Arrays.asList("context", "host");
+                List<String> labelNameList = Arrays.asList("host", "context");
 
                 GaugeMetricFamily activeSessionCountGauge = new GaugeMetricFamily(
                         "tomcat_session_active_total",

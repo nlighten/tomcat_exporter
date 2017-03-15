@@ -8,6 +8,7 @@
 .idea
 *.iml
 
+work/
 target/
 simpleclient_pushgateway/mockserver.log
 simpleclient_pushgateway/mockserver_request.log

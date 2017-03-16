@@ -12,9 +12,7 @@
     <packaging>jar</packaging>
 
     <name>Prometheus client for Apache Tomcat</name>
-    <description>
-        Collector of various Tomcat metrics
-    </description>
+    <description>Collector of various Tomcat metrics</description>
 
     <licenses>
         <license>

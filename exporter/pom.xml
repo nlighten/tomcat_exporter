@@ -12,9 +12,7 @@
     <packaging>war</packaging>
 
     <name>Tomcat Prometheus Exporter Servlet</name>
-    <description>
-        Prometheus HTTP servlet exporter for Apache Tomcat.
-    </description>
+    <description>Prometheus HTTP servlet exporter for Apache Tomcat</description>
 
     <licenses>
         <license>

@@ -43,7 +43,7 @@ public class TomcatGenericExportsTest extends AbstractTomcatMetricsTest {
     public void testSessionMetrics() throws Exception {
         assertThat(CollectorRegistry.defaultRegistry.getSampleValue("tomcat_session_active_total", new String[]{"host", "context"}, new String[]{"localhost", CONTEXT_PATH}), is(greaterThan(0.0)));
         assertThat(CollectorRegistry.defaultRegistry.getSampleValue("tomcat_session_rejected_total", new String[]{"host", "context"}, new String[]{"localhost", CONTEXT_PATH}), is(0.0));
-        assertThat(CollectorRegistry.defaultRegistry.getSampleValue("tomcat_session_created_total", new String[]{"host", "context"}, new String[]{"localhost", CONTEXT_PATH}), is(greaterThan(1.0)));
+        assertThat(CollectorRegistry.defaultRegistry.getSampleValue("tomcat_session_created_total", new String[]{"host", "context"}, new String[]{"localhost", CONTEXT_PATH}), is(greaterThan(0.0)));
         assertThat(CollectorRegistry.defaultRegistry.getSampleValue("tomcat_session_expired_total", new String[]{"host", "context"}, new String[]{"localhost", CONTEXT_PATH}), is(0.0));
         assertThat(CollectorRegistry.defaultRegistry.getSampleValue("tomcat_session_alivetime_seconds_avg", new String[]{"host", "context"}, new String[]{"localhost", CONTEXT_PATH}), is(notNullValue()));
         assertThat(CollectorRegistry.defaultRegistry.getSampleValue("tomcat_session_alivetime_seconds_max", new String[]{"host", "context"}, new String[]{"localhost", CONTEXT_PATH}), is(notNullValue()));

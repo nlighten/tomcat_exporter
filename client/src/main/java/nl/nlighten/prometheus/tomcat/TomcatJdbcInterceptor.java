@@ -22,6 +22,7 @@ import org.apache.tomcat.jdbc.pool.interceptor.AbstractQueryReport;
  * <p>
  * Example usage:
  * <pre>
+ * {@code
  * <Resource name="jdbc/TestDB"
  *           auth="Container"
  *           type="javax.sql.DataSource"
@@ -31,6 +32,7 @@ import org.apache.tomcat.jdbc.pool.interceptor.AbstractQueryReport;
  *           password="password"
  *           driverClassName="com.mysql.jdbc.Driver"
  *           url="jdbc:mysql://localhost:3306/mysql"/>
+ * }
  * </pre>
  *
  * Configuration options are as shown above an have the following meaning:

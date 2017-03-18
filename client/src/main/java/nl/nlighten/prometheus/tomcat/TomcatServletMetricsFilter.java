@@ -25,6 +25,7 @@ import java.io.IOException;
  * Next, add this filter to the $CATALINA_BASE/lib/web.xml, e.g.:
  *
  * <pre>
+ * {@code
  * <filter>
  *   <filter-name>ServletMetricsFilter</filter-name>
  *   <filter-class>nl.nlighten.prometheus.TomcatServletMetricsFilter</filter-class>
@@ -34,6 +35,7 @@ import java.io.IOException;
  *     <param-value>.01, .05, .1, .25, .5, 1, 2.5, 5, 10, 30</param-value>
  *   </init-param>
  * </filter>
+ * }
  * </pre>
  *
  * If you running Tomcat embedded, please check AbstractTomcatMetricsTest for example configuration.

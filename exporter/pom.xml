@@ -5,7 +5,7 @@
     <parent>
         <groupId>nl.nlighten</groupId>
         <artifactId>tomcat_exporter</artifactId>
-        <version>0.0.3-SNAPSHOT</version>
+        <version>0.0.3</version>
     </parent>
 
     <artifactId>tomcat_exporter_servlet</artifactId>
@@ -36,7 +36,7 @@
         <dependency>
             <groupId>nl.nlighten</groupId>
             <artifactId>tomcat_exporter_client</artifactId>
-            <version>0.0.3-SNAPSHOT</version>
+            <version>0.0.3</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>

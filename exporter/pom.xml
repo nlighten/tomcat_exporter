@@ -27,16 +27,19 @@
             <groupId>io.prometheus</groupId>
             <artifactId>simpleclient</artifactId>
             <version>${io.prometheus.simpleclient.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>io.prometheus</groupId>
             <artifactId>simpleclient_common</artifactId>
             <version>${io.prometheus.simpleclient.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>nl.nlighten</groupId>
             <artifactId>tomcat_exporter_client</artifactId>
             <version>0.0.4-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>

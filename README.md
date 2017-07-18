@@ -23,7 +23,7 @@ Using the `common.loader` is important as we need to make sure that all metrics 
 * [simpleclient_hotspot](https://search.maven.org/#search%7Cga%7C1%7Ca%3A%22simpleclient_hotspot%22)
 * [tomcat_exporter_client](https://search.maven.org/#search%7Cga%7C1%7Ca%3A%22tomcat_exporter_client%22)
 
-Next, rename [tomcat_exporter_servlet](https://search.maven.org/#search%7Cga%7C1%7Ca%3A%22tomcat_exporter_client%22) war file to `metrics.war` and add it to the webapps directory of Tomcat. After restart of tomcat you should be able to access metrics via the `/metrics/` endpoint.   
+Next, rename [tomcat_exporter_servlet](https://search.maven.org/#search%7Cga%7C1%7Ca%3A%22tomcat_exporter_servlet%22) war file to `metrics.war` and add it to the webapps directory of Tomcat. After restart of tomcat you should be able to access metrics via the `/metrics/` endpoint.   
 
 ### Servlet response time metrics
 If you want servlet response time metrics you can configure the `TomcatServletMetricsFilter` by adding it to the $CATALINA_BASE/lib/web.xml as shown below. There is no need to modify already deployed applications.

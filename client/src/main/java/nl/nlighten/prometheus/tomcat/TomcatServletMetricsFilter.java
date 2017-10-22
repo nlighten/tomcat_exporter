@@ -7,7 +7,6 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -69,7 +68,7 @@ public class TomcatServletMetricsFilter implements Filter {
                 String[] bucketParams = filterConfig.getInitParameter(BUCKET_CONFIG_PARAM).split(",");
                 double[] buckets = new double[bucketParams.length];
                 for (int i = 0; i < bucketParams.length; i++) {
-                    buckets[i] = Double.parseDouble(bucketParams[i]);
+                    buckets[i] = Double.parseDouble(bucketParams[i].trim());
                 }
                 servletLatencyBuilder.buckets(buckets);
             } else {

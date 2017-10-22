@@ -22,7 +22,7 @@
     <scm>
         <connection>scm:git:https://github.com/nlighten/tomcat_exporter.git</connection>
         <developerConnection>scm:git:https://github.com/nlighten/tomcat_exporter.git</developerConnection>
-        <url>https://github.com/nlighten/tomcat_exporter.git</url>
+        <url>git@github.com:nlighten/tomcat_exporter.git</url>
         <tag>HEAD</tag>
     </scm>
 

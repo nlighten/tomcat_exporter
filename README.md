@@ -44,7 +44,7 @@ If you want servlet response time metrics you can configure the `TomcatServletMe
   <url-pattern>/*</url-pattern>
 </filter-mapping>
 ```
-
+For an explanation on histograms and buckets please see the [prometheus documentation](https://prometheus.io/docs/concepts/metric_types/#histogram).
 
 ### Database response time metrics
 Database response time metrics are only available when using the [Tomcat JDBC Pool](http://tomcat.apache.org/tomcat-8.5-doc/jdbc-pool.html) as this collector uses an interceptor mechanism that is only available for this type of pool.

@@ -23,7 +23,7 @@ public class TomcatJDbcp2PoolExportsTest extends AbstractTomcatMetricsTest {
     }
 
     @Test
-    public void testRequestProcessorMetrics() throws Exception {
+    public void testJDbcp2PoolMetrics() throws Exception {
         assertThat(CollectorRegistry.defaultRegistry.getSampleValue("tomcat_dbcp2_connections_active_total", new String[]{"pool"}, new String[]{"jdbc/db"}), is(0.0));
         assertThat(CollectorRegistry.defaultRegistry.getSampleValue("tomcat_dbcp2_connections_idle_total", new String[]{"pool"}, new String[]{"jdbc/db"}), is(1.0));
         assertThat(CollectorRegistry.defaultRegistry.getSampleValue("tomcat_dbcp2_connections_max", new String[]{"pool"}, new String[]{"jdbc/db"}), is(8.0));

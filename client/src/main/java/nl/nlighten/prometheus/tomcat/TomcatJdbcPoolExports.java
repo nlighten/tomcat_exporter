@@ -65,35 +65,107 @@ public class TomcatJdbcPoolExports extends Collector {
                         "Number of threads waiting for connections from this pool",
                         labelList);
 
+                GaugeMetricFamily borrowedConnectionsGauge = new GaugeMetricFamily(
+                        "tomcat_jdbc_connections_borrowed_total",
+                        "Number of connections borrowed from this pool",
+                        labelList);
+
+                GaugeMetricFamily returnedConnectionsGauge = new GaugeMetricFamily(
+                        "tomcat_jdbc_connections_returned_total",
+                        "Number of connections returned to this pool",
+                        labelList);
+
+                GaugeMetricFamily createdConnectionsGauge = new GaugeMetricFamily(
+                        "tomcat_jdbc_connections_created_total",
+                        "Number of connections created by this pool",
+                        labelList);
+
+                GaugeMetricFamily releasedConnectionsGauge = new GaugeMetricFamily(
+                        "tomcat_jdbc_connections_released_total",
+                        "Number of connections released by this pool",
+                        labelList);
+
+                GaugeMetricFamily reconnectedConnectionsGauge = new GaugeMetricFamily(
+                        "tomcat_jdbc_connections_reconnected_total",
+                        "Number of reconnected connections by this pool",
+                        labelList);
+
+                GaugeMetricFamily removeAbandonedConnectionsGauge = new GaugeMetricFamily(
+                        "tomcat_jdbc_connections_removeabandoned_total",
+                        "Number of abandoned connections that have been removed",
+                        labelList);
+
+                GaugeMetricFamily releasedIdleConnectionsGauge = new GaugeMetricFamily(
+                        "tomcat_jdbc_connections_releasedidle_total",
+                        "Number of idle connections that have been released",
+                        labelList);
+
                 for (final ObjectInstance mBean : mBeans) {
                     List<String> labelValueList = Collections.singletonList(mBean.getObjectName().getKeyProperty("name").replaceAll("[\"\\\\]", ""));
+                    if (mBean.getObjectName().getKeyProperty("connections") == null) {  // Tomcat 8.5.33 ignore PooledConnections
 
-                    maxActiveConnectionsGauge.addMetric(
-                            labelValueList,
-                            ((Integer) server.getAttribute(mBean.getObjectName(), "MaxActive")).doubleValue());
+                        maxActiveConnectionsGauge.addMetric(
+                                labelValueList,
+                                ((Integer) server.getAttribute(mBean.getObjectName(), "MaxActive")).doubleValue());
 
-                    activeConnectionsGauge.addMetric(
-                            labelValueList,
-                            ((Integer) server.getAttribute(mBean.getObjectName(), "Active")).doubleValue());
+                        activeConnectionsGauge.addMetric(
+                                labelValueList,
+                                ((Integer) server.getAttribute(mBean.getObjectName(), "Active")).doubleValue());
 
-                    idleConnectionsGauge.addMetric(
-                            labelValueList,
-                            ((Integer) server.getAttribute(mBean.getObjectName(), "Idle")).doubleValue());
+                        idleConnectionsGauge.addMetric(
+                                labelValueList,
+                                ((Integer) server.getAttribute(mBean.getObjectName(), "Idle")).doubleValue());
 
-                    totalConnectionsGauge.addMetric(
-                            labelValueList,
-                            ((Integer) server.getAttribute(mBean.getObjectName(), "Size")).doubleValue());
+                        totalConnectionsGauge.addMetric(
+                                labelValueList,
+                                ((Integer) server.getAttribute(mBean.getObjectName(), "Size")).doubleValue());
 
-                    waitingThreadsCountGauge.addMetric(
-                            labelValueList,
-                            ((Integer) server.getAttribute(mBean.getObjectName(), "WaitCount")).doubleValue());
+                        waitingThreadsCountGauge.addMetric(
+                                labelValueList,
+                                ((Integer) server.getAttribute(mBean.getObjectName(), "WaitCount")).doubleValue());
+
+                        borrowedConnectionsGauge.addMetric(
+                                labelValueList,
+                                ((Long) server.getAttribute(mBean.getObjectName(), "BorrowedCount")).doubleValue());
+
+                        returnedConnectionsGauge.addMetric(
+                                labelValueList,
+                                ((Long) server.getAttribute(mBean.getObjectName(), "ReturnedCount")).doubleValue());
+
+                        createdConnectionsGauge.addMetric(
+                                labelValueList,
+                                ((Long) server.getAttribute(mBean.getObjectName(), "CreatedCount")).doubleValue());
+
+                        releasedConnectionsGauge.addMetric(
+                                labelValueList,
+                                ((Long) server.getAttribute(mBean.getObjectName(), "ReleasedCount")).doubleValue());
+
+                        reconnectedConnectionsGauge.addMetric(
+                                labelValueList,
+                                ((Long) server.getAttribute(mBean.getObjectName(), "ReconnectedCount")).doubleValue());
+
+                        removeAbandonedConnectionsGauge.addMetric(
+                                labelValueList,
+                                ((Long) server.getAttribute(mBean.getObjectName(), "RemoveAbandonedCount")).doubleValue());
+
+                        releasedIdleConnectionsGauge.addMetric(
+                                labelValueList,
+                                ((Long) server.getAttribute(mBean.getObjectName(), "ReleasedIdleCount")).doubleValue());
+
+                    }
                 }
-
                 mfs.add(maxActiveConnectionsGauge);
                 mfs.add(activeConnectionsGauge);
                 mfs.add(idleConnectionsGauge);
                 mfs.add(totalConnectionsGauge);
                 mfs.add(waitingThreadsCountGauge);
+                mfs.add(borrowedConnectionsGauge);
+                mfs.add(returnedConnectionsGauge);
+                mfs.add(createdConnectionsGauge);
+                mfs.add(releasedConnectionsGauge);
+                mfs.add(reconnectedConnectionsGauge);
+                mfs.add(removeAbandonedConnectionsGauge);
+                mfs.add(releasedIdleConnectionsGauge);
             }
         } catch (Exception e) {
             e.printStackTrace();

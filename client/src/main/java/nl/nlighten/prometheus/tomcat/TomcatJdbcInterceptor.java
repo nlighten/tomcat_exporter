@@ -141,7 +141,7 @@ public class TomcatJdbcInterceptor extends AbstractQueryReport {
         String sql = super.reportFailedQuery(query, args, name, start, t);
         long now = System.currentTimeMillis();
         long delta = now - start;
-        globalQueryStats.labels(FAILED_QUERY_STATUS).observe(delta/1000);
+        globalQueryStats.labels(FAILED_QUERY_STATUS).observe((double) delta/1000);
         if (failedQueryStatsEnabled) {
             failedQueryStats.labels(sql).inc();
         }
@@ -151,9 +151,9 @@ public class TomcatJdbcInterceptor extends AbstractQueryReport {
     @Override
     protected String reportQuery(String query, Object[] args, final String name, long start, long delta) {
         String sql = super.reportQuery(query, args, name, start, delta);
-        globalQueryStats.labels(SUCCESS_QUERY_STATUS).observe(delta/1000);
+        globalQueryStats.labels(SUCCESS_QUERY_STATUS).observe((double) delta/1000);
         if (slowQueryStatsEnabled && delta >= slowQueryThreshold) {
-            slowQueryStats.labels(sql).observe(delta/1000);
+            slowQueryStats.labels(sql).observe((double) delta/1000);
         }
         return sql;
     }
@@ -161,9 +161,9 @@ public class TomcatJdbcInterceptor extends AbstractQueryReport {
     @Override
     protected String reportSlowQuery(String query, Object[] args, String name, long start, long delta) {
         String sql = super.reportSlowQuery(query, args, name, start, delta);
-        globalQueryStats.labels(SUCCESS_QUERY_STATUS).observe(delta/1000);
+        globalQueryStats.labels(SUCCESS_QUERY_STATUS).observe((double) delta/1000);
         if (slowQueryStatsEnabled && delta >= slowQueryThreshold) {
-            slowQueryStats.labels(sql).observe(delta/1000);
+            slowQueryStats.labels(sql).observe((double) delta/1000);
         }
         return sql;
     }

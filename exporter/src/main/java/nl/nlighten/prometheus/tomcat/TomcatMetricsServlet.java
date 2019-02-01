@@ -31,7 +31,7 @@ public class TomcatMetricsServlet extends MetricsServlet {
     }
 
     private boolean initialized() {
-        Enumeration<Collector.MetricFamilySamples> samples = CollectorRegistry.defaultRegistry.filteredMetricFamilySamples(new HashSet<gitString>(Arrays.asList("tomcat_info")));
+        Enumeration<Collector.MetricFamilySamples> samples = CollectorRegistry.defaultRegistry.filteredMetricFamilySamples(new HashSet<String>(Arrays.asList("tomcat_info")));
         return samples.hasMoreElements();
     }
 }

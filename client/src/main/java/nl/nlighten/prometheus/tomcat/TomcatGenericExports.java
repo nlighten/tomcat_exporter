@@ -6,9 +6,8 @@ import io.prometheus.client.GaugeMetricFamily;
 import org.apache.catalina.util.ServerInfo;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
-import javax.management.MBeanServer;
-import javax.management.ObjectInstance;
-import javax.management.ObjectName;
+
+import javax.management.*;
 import java.lang.management.ManagementFactory;
 import java.util.*;
 
@@ -252,39 +251,39 @@ public class TomcatGenericExports extends Collector {
                         "Maximum number of concurrent connections served by this pool.",
                         labelList);
 
+                String[] genericAttributes = new String[]{"currentThreadCount", "currentThreadsBusy", "maxThreads", "connectionCount", "maxConnections"};
+
                 for (final ObjectInstance mBean : mBeans) {
                     List<String> labelValueList = Collections.singletonList(mBean.getObjectName().getKeyProperty("name").replaceAll("[\"\\\\]", ""));
+                    AttributeList attributeList = server.getAttributes(mBean.getObjectName(), genericAttributes);
+                    for (Attribute attribute : attributeList.asList()) {
+                        switch (attribute.getName()) {
+                            case "currentThreadCount":
+                                threadPoolCurrentCountGauge.addMetric(labelValueList, ((Integer) attribute.getValue()).doubleValue());
+                                mfs.add(threadPoolCurrentCountGauge);
+                                break;
+                            case "currentThreadsBusy":
+                                threadPoolActiveCountGauge.addMetric(labelValueList, ((Integer) attribute.getValue()).doubleValue());
+                                mfs.add(threadPoolActiveCountGauge);
+                                break;
+                            case "maxThreads":
+                                threadPoolMaxThreadsGauge.addMetric(labelValueList, ((Integer) attribute.getValue()).doubleValue());
+                                mfs.add(threadPoolMaxThreadsGauge);
+                                break;
+                            case "connectionCount":
+                                threadPoolConnectionCountGauge.addMetric(labelValueList, ((Long) attribute.getValue()).doubleValue());
+                                mfs.add(threadPoolConnectionCountGauge);
+                                break;
+                            case "maxConnections":
+                                threadPoolMaxConnectionGauge.addMetric(labelValueList, ((Integer) attribute.getValue()).doubleValue());
+                                mfs.add(threadPoolMaxConnectionGauge);
 
-                    threadPoolCurrentCountGauge.addMetric(
-                            labelValueList,
-                            ((Integer) server.getAttribute(mBean.getObjectName(), "currentThreadCount")).doubleValue());
-
-                    threadPoolActiveCountGauge.addMetric(
-                            labelValueList,
-                            ((Integer) server.getAttribute(mBean.getObjectName(), "currentThreadsBusy")).doubleValue());
-
-                    threadPoolMaxThreadsGauge.addMetric(
-                            labelValueList,
-                            ((Integer) server.getAttribute(mBean.getObjectName(), "maxThreads")).doubleValue());
-
-                    threadPoolConnectionCountGauge.addMetric(
-                            labelValueList,
-                            ((Long) server.getAttribute(mBean.getObjectName(), "connectionCount")).doubleValue());
-
-                    threadPoolMaxConnectionGauge.addMetric(
-                            labelValueList,
-                            ((Integer) server.getAttribute(mBean.getObjectName(), "maxConnections")).doubleValue());
-
+                        }
+                    }
                 }
-
-                mfs.add(threadPoolCurrentCountGauge);
-                mfs.add(threadPoolActiveCountGauge);
-                mfs.add(threadPoolMaxThreadsGauge);
-                mfs.add(threadPoolConnectionCountGauge);
-                mfs.add(threadPoolMaxConnectionGauge);
             }
         } catch (Exception e) {
-            log.error("Error retrieving metric.", e);
+            log.error("Error retrieving metric:" + e.getMessage());
         }
     }
 

@@ -2,12 +2,12 @@ package nl.nlighten.prometheus.tomcat;
 
 import io.prometheus.client.Collector;
 import io.prometheus.client.GaugeMetricFamily;
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
+
 import javax.management.*;
 import java.lang.management.ManagementFactory;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Exports Tomcat <a href="https://tomcat.apache.org/tomcat-8.5-doc/jndi-datasource-examples-howto.html#Database_Connection_Pool_(DBCP_2)_Configurations">DBCP2-pool</a> metrics.
@@ -28,6 +28,8 @@ import java.util.Set;
 
 public class TomcatDbcp2PoolExports extends Collector {
 
+    private static final Log log = LogFactory.getLog(TomcatDbcp2PoolExports.class);
+
     public List<MetricFamilySamples> collect() {
         List<MetricFamilySamples> mfs = new ArrayList<MetricFamilySamples>();
         try {
@@ -36,7 +38,7 @@ public class TomcatDbcp2PoolExports extends Collector {
             Set<ObjectInstance> mBeans = server.queryMBeans(filterName, null);
 
             if (mBeans.size() > 0) {
-                List<String> labelList = Collections.singletonList("pool");
+                List<String> labelList = Arrays.asList("pool", "context");
 
                 GaugeMetricFamily maxActiveConnectionsGauge = new GaugeMetricFamily(
                         "tomcat_dbcp2_connections_max",
@@ -53,36 +55,37 @@ public class TomcatDbcp2PoolExports extends Collector {
                         "Number of idle connections in this pool",
                         labelList);
 
+                String[] poolAttributes = new String[]{"maxTotal", "numActive", "numIdle"};
+
 
                 for (final ObjectInstance mBean : mBeans) {
-                    if (mBean.getObjectName().getKeyProperty("connectionpool") == null){
-                        List<String> labelValueList = Collections.singletonList(mBean.getObjectName().getKeyProperty("name").replaceAll("[\"\\\\]", ""));
+                    if (mBean.getObjectName().getKeyProperty("connectionpool") == null) {
+                        List<String> labelValueList = Arrays.asList(mBean.getObjectName().getKeyProperty("name").replaceAll("[\"\\\\]", ""), mBean.getObjectName().getKeyProperty("context"));
+                        if (mBean.getObjectName().getKeyProperty("connections") == null) {  // Tomcat 8.5.33 ignore PooledConnections
+                            AttributeList attributeList = server.getAttributes(mBean.getObjectName(), poolAttributes);
 
-                        maxActiveConnectionsGauge.addMetric(
-                                labelValueList,
-                                ((Integer) server.getAttribute(mBean.getObjectName(), "maxTotal")).doubleValue());
-
-                        activeConnectionsGauge.addMetric(
-                                labelValueList,
-                                ((Integer) server.getAttribute(mBean.getObjectName(), "numActive")).doubleValue());
-
-                        idleConnectionsGauge.addMetric(
-                                labelValueList,
-                                ((Integer) server.getAttribute(mBean.getObjectName(), "numIdle")).doubleValue());
-
+                            for (Attribute attribute : attributeList.asList()) {
+                                switch (attribute.getName()) {
+                                    case "maxTotal":
+                                        maxActiveConnectionsGauge.addMetric(labelValueList, ((Integer) attribute.getValue()).doubleValue());
+                                        mfs.add(maxActiveConnectionsGauge);
+                                        break;
+                                    case "numActive":
+                                        activeConnectionsGauge.addMetric(labelValueList, ((Integer) attribute.getValue()).doubleValue());
+                                        mfs.add(activeConnectionsGauge);
+                                        break;
+                                    case "numIdle":
+                                        idleConnectionsGauge.addMetric(labelValueList, ((Integer) attribute.getValue()).doubleValue());
+                                        mfs.add(idleConnectionsGauge);
+                                }
+                            }
+                        }
                     }
-
-                    mfs.add(maxActiveConnectionsGauge);
-                    mfs.add(activeConnectionsGauge);
-                    mfs.add(idleConnectionsGauge);
                 }
             }
-        } catch (javax.management.AttributeNotFoundException e) {
-            // Can happen in exception cases where TomcatDbcp2PoolExports is configured with a TomcatJdcpPool configured
         }
         catch (Exception e) {
-            System.out.println ("####### " + e.getLocalizedMessage());
-            e.printStackTrace();
+            log.error("Error retrieving metric:" + e.getMessage());
         }
         return mfs;
     }

@@ -60,7 +60,7 @@ public class TomcatDbcp2PoolExports extends Collector {
 
                 for (final ObjectInstance mBean : mBeans) {
                     if (mBean.getObjectName().getKeyProperty("connectionpool") == null) {
-                        List<String> labelValueList = Arrays.asList(mBean.getObjectName().getKeyProperty("name").replaceAll("[\"\\\\]", ""), mBean.getObjectName().getKeyProperty("context"));
+                        List<String> labelValueList = Arrays.asList(mBean.getObjectName().getKeyProperty("name").replaceAll("[\"\\\\]", ""), Optional.ofNullable(mBean.getObjectName().getKeyProperty("context")).orElse("global"));
                         if (mBean.getObjectName().getKeyProperty("connections") == null) {  // Tomcat 8.5.33 ignore PooledConnections
                             AttributeList attributeList = server.getAttributes(mBean.getObjectName(), poolAttributes);
 

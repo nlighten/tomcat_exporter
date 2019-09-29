@@ -81,7 +81,6 @@ public class TomcatJdbcPoolExports extends Collector {
                         "tomcat_jdbc_connections_created_total",
                         "Number of connections created by this pool",
                         labelList);
-
                 GaugeMetricFamily releasedConnectionsGauge = new GaugeMetricFamily(
                         "tomcat_jdbc_connections_released_total",
                         "Number of connections released by this pool",
@@ -105,7 +104,7 @@ public class TomcatJdbcPoolExports extends Collector {
                 String[] poolAttributes = new String[]{"MaxActive", "Active", "Idle", "Size", "WaitCount", "BorrowedCount", "ReturnedCount", "CreatedCount", "ReleasedCount", "ReconnectedCount", "RemoveAbandonedCount", "ReleasedIdleCount"};
 
                 for (final ObjectInstance mBean : mBeans) {
-                    List<String> labelValueList = Arrays.asList(mBean.getObjectName().getKeyProperty("name").replaceAll("[\"\\\\]", ""), mBean.getObjectName().getKeyProperty("context"));
+                    List<String> labelValueList = Arrays.asList(mBean.getObjectName().getKeyProperty("name").replaceAll("[\"\\\\]", ""), Optional.ofNullable(mBean.getObjectName().getKeyProperty("context")).orElse("global"));
                     if (mBean.getObjectName().getKeyProperty("connections") == null) {  // Tomcat 8.5.33 ignore PooledConnections
                         AttributeList attributeList = server.getAttributes(mBean.getObjectName(), poolAttributes);
 

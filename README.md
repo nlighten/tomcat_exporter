@@ -76,8 +76,9 @@ Configuration options of the interceptor are as shown above and have the followi
 - buckets: the buckets separated by a pipe ("|") symbol to be used for the global query response times, defaults to .01|.05|.1|.25|.5|1|2.5|10
 - slowQueryBuckets: the buckets separated by a pipe ("|") symbol to be used for the global query response times, defaults to 1|2.5|10|30
 
-> NOTE: enabling logFailed and logSlow may lead to a lot of additional metrics., so be careful !!!  
- 
+> NOTE: 
+>- Enabling logFailed and logSlow may lead to a lot of additional metrics., so be careful !!!  
+>- If you are defining your data source on application level (so inside your war), you need to set [bindOnInit](https://tomcat.apache.org/tomcat-9.0-doc/config/http.html#Standard_Implementation) to ensure that your data source has been initialized before the metrics application starts. 
 
 ### Embedded mode
 If you run Tomcat in embedded mode, please look at the `AbstractTomcatMetricsTest` for an example on how to configure the various exporters when running embedded.

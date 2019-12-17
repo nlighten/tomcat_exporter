@@ -247,7 +247,7 @@ public class TomcatGenericExports extends Collector {
                         labelList);
 
                 GaugeMetricFamily threadPoolMaxConnectionGauge = new GaugeMetricFamily(
-                            "tomcat_connections_active_max",
+                        "tomcat_connections_active_max",
                         "Maximum number of concurrent connections served by this pool.",
                         labelList);
 
@@ -260,27 +260,28 @@ public class TomcatGenericExports extends Collector {
                         switch (attribute.getName()) {
                             case "currentThreadCount":
                                 threadPoolCurrentCountGauge.addMetric(labelValueList, ((Integer) attribute.getValue()).doubleValue());
-                                mfs.add(threadPoolCurrentCountGauge);
                                 break;
                             case "currentThreadsBusy":
                                 threadPoolActiveCountGauge.addMetric(labelValueList, ((Integer) attribute.getValue()).doubleValue());
-                                mfs.add(threadPoolActiveCountGauge);
                                 break;
                             case "maxThreads":
                                 threadPoolMaxThreadsGauge.addMetric(labelValueList, ((Integer) attribute.getValue()).doubleValue());
-                                mfs.add(threadPoolMaxThreadsGauge);
                                 break;
                             case "connectionCount":
                                 threadPoolConnectionCountGauge.addMetric(labelValueList, ((Long) attribute.getValue()).doubleValue());
-                                mfs.add(threadPoolConnectionCountGauge);
                                 break;
                             case "maxConnections":
                                 threadPoolMaxConnectionGauge.addMetric(labelValueList, ((Integer) attribute.getValue()).doubleValue());
-                                mfs.add(threadPoolMaxConnectionGauge);
 
                         }
                     }
                 }
+
+                addNonEmptyMetricFamily(mfs, threadPoolCurrentCountGauge);
+                addNonEmptyMetricFamily(mfs, threadPoolActiveCountGauge);
+                addNonEmptyMetricFamily(mfs, threadPoolMaxThreadsGauge);
+                addNonEmptyMetricFamily(mfs, threadPoolConnectionCountGauge);
+                addNonEmptyMetricFamily(mfs, threadPoolMaxConnectionGauge);
             }
         } catch (Exception e) {
             log.error("Error retrieving metric:" + e.getMessage());
@@ -295,6 +296,13 @@ public class TomcatGenericExports extends Collector {
                 Arrays.asList("version", "build"));
         tomcatInfo.addMetric(Arrays.asList(ServerInfo.getServerNumber(), ServerInfo.getServerBuilt()), 1);
         mfs.add(tomcatInfo);
+    }
+
+
+    private void addNonEmptyMetricFamily(List<MetricFamilySamples> mfs, GaugeMetricFamily metricFamily) {
+        if (metricFamily.samples.size() > 0) {
+            mfs.add(metricFamily);
+        }
     }
 
 

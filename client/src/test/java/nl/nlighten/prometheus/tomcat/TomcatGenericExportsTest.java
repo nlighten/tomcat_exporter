@@ -61,6 +61,6 @@ public class TomcatGenericExportsTest extends AbstractTomcatMetricsTest {
         assertThat(CollectorRegistry.defaultRegistry.getSampleValue("tomcat_threads_active_total", new String[]{"name"}, new String[]{"http-nio-auto-1"}), is(0.0));
         assertThat(CollectorRegistry.defaultRegistry.getSampleValue("tomcat_threads_max", new String[]{"name"}, new String[]{"http-nio-auto-1"}), is(200.0));
         assertThat(CollectorRegistry.defaultRegistry.getSampleValue("tomcat_connections_active_total", new String[]{"name"}, new String[]{"http-nio-auto-1"}), is(greaterThan(0.0)));
-        assertThat(CollectorRegistry.defaultRegistry.getSampleValue("tomcat_connections_active_max", new String[]{"name"}, new String[]{"http-nio-auto-1"}), is(10000.0));
+        assertThat(CollectorRegistry.defaultRegistry.getSampleValue("tomcat_connections_active_max", new String[]{"name"}, new String[]{"http-nio-auto-1"}), is(8192.0));
     }
 }

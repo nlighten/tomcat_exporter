@@ -41,9 +41,9 @@
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <org.apache.tomcat.version>9.0.30</org.apache.tomcat.version>
-        <io.prometheus.simpleclient.version>0.8.0</io.prometheus.simpleclient.version>
-        <junit.version>4.12</junit.version>
+        <org.apache.tomcat.version>9.0.40</org.apache.tomcat.version>
+        <io.prometheus.simpleclient.version>0.9.0</io.prometheus.simpleclient.version>
+        <junit.version>4.13.1</junit.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>

@@ -112,55 +112,55 @@ public class TomcatJdbcPoolExports extends Collector {
                             switch (attribute.getName()) {
                                 case "MaxActive":
                                     maxActiveConnectionsGauge.addMetric(labelValueList, ((Integer) attribute.getValue()).doubleValue());
-                                    mfs.add(maxActiveConnectionsGauge);
                                     break;
                                 case "Active":
                                     activeConnectionsGauge.addMetric(labelValueList, ((Integer) attribute.getValue()).doubleValue());
-                                    mfs.add(activeConnectionsGauge);
                                     break;
                                 case "Idle":
                                     idleConnectionsGauge.addMetric(labelValueList, ((Integer) attribute.getValue()).doubleValue());
-                                    mfs.add(idleConnectionsGauge);
                                     break;
                                 case "Size":
                                     totalConnectionsGauge.addMetric(labelValueList, ((Integer) attribute.getValue()).doubleValue());
-                                    mfs.add(totalConnectionsGauge);
                                     break;
                                 case "WaitCount":
                                     waitingThreadsCountGauge.addMetric(labelValueList, ((Integer) attribute.getValue()).doubleValue());
-                                    mfs.add(waitingThreadsCountGauge);
                                     break;
                                 case "BorrowedCount":
                                     borrowedConnectionsGauge.addMetric(labelValueList, ((Long) attribute.getValue()).doubleValue());
-                                    mfs.add(borrowedConnectionsGauge);
                                     break;
                                 case "ReturnedCount":
                                     returnedConnectionsGauge.addMetric(labelValueList, ((Long) attribute.getValue()).doubleValue());
-                                    mfs.add(returnedConnectionsGauge);
                                     break;
                                 case "CreatedCount":
                                     createdConnectionsGauge.addMetric(labelValueList, ((Long) attribute.getValue()).doubleValue());
-                                    mfs.add(createdConnectionsGauge);
                                     break;
                                 case "ReleasedCount":
                                     releasedConnectionsGauge.addMetric(labelValueList, ((Long) attribute.getValue()).doubleValue());
-                                    mfs.add(releasedConnectionsGauge);
                                     break;
                                 case "ReconnectedCount":
                                     reconnectedConnectionsGauge.addMetric(labelValueList, ((Long) attribute.getValue()).doubleValue());
-                                    mfs.add(reconnectedConnectionsGauge);
                                     break;
                                 case "RemoveAbandonedCount":
                                     removeAbandonedConnectionsGauge.addMetric(labelValueList, ((Long) attribute.getValue()).doubleValue());
-                                    mfs.add(removeAbandonedConnectionsGauge);
                                     break;
                                 case "ReleasedIdleCount":
                                     releasedIdleConnectionsGauge.addMetric(labelValueList, ((Long) attribute.getValue()).doubleValue());
-                                    mfs.add(releasedIdleConnectionsGauge);
                             }
                         }
                     }
                 }
+                mfs.add(maxActiveConnectionsGauge);
+                mfs.add(activeConnectionsGauge);
+                mfs.add(idleConnectionsGauge);
+                mfs.add(totalConnectionsGauge);
+                mfs.add(waitingThreadsCountGauge);
+                mfs.add(borrowedConnectionsGauge);
+                mfs.add(returnedConnectionsGauge);
+                mfs.add(createdConnectionsGauge);
+                mfs.add(releasedConnectionsGauge);
+                mfs.add(reconnectedConnectionsGauge);
+                mfs.add(removeAbandonedConnectionsGauge);
+                mfs.add(releasedIdleConnectionsGauge);
             }
         } catch (Exception e) {
             log.error("Error retrieving metric:" + e.getMessage());

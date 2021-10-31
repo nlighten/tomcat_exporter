@@ -68,20 +68,20 @@ public class TomcatDbcp2PoolExports extends Collector {
                                 switch (attribute.getName()) {
                                     case "maxTotal":
                                         maxActiveConnectionsGauge.addMetric(labelValueList, ((Integer) attribute.getValue()).doubleValue());
-                                        mfs.add(maxActiveConnectionsGauge);
                                         break;
                                     case "numActive":
                                         activeConnectionsGauge.addMetric(labelValueList, ((Integer) attribute.getValue()).doubleValue());
-                                        mfs.add(activeConnectionsGauge);
                                         break;
                                     case "numIdle":
                                         idleConnectionsGauge.addMetric(labelValueList, ((Integer) attribute.getValue()).doubleValue());
-                                        mfs.add(idleConnectionsGauge);
                                 }
                             }
                         }
                     }
                 }
+                mfs.add(maxActiveConnectionsGauge);
+                mfs.add(activeConnectionsGauge);
+                mfs.add(idleConnectionsGauge);
             }
         }
         catch (Exception e) {

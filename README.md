@@ -1,3 +1,6 @@
+> NOTE: The official Prometheus [java client](https://github.com/prometheus/client_java) now supports some overlapping functionality like the [servlet filter](https://github.com/prometheus/client_java#servlet-filter). I suggest users to seriously consider to switch as you can expect more long term support from that implementation. I am considering sunsetting support for this exporter by the end of 2022.
+
+
 # Prometheus Tomcat Exporter
 A set of collectors that can be used to monitor Apache Tomcat instances.
 

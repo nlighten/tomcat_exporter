@@ -23,10 +23,31 @@ Using the `common.loader` is important as we need to make sure that all metrics 
 * [simpleclient](https://search.maven.org/#search%7Cga%7C1%7Ca%3A%22simpleclient%22)
 * [simpleclient_common](https://search.maven.org/#search%7Cga%7C1%7Ca%3A%22simpleclient_common%22)
 * [simpleclient_servlet](https://search.maven.org/#search%7Cga%7C1%7Ca%3A%22simpleclient_servlet%22)
+* [simpleclient_servlet_common](https://search.maven.org/#search%7Cga%7C1%7Ca%3A%22simpleclient_servlet_common%22)
 * [simpleclient_hotspot](https://search.maven.org/#search%7Cga%7C1%7Ca%3A%22simpleclient_hotspot%22)
 * [tomcat_exporter_client](https://search.maven.org/#search%7Cga%7C1%7Ca%3A%22tomcat_exporter_client%22)
 
 Next, rename [tomcat_exporter_servlet](https://search.maven.org/#search%7Cga%7C1%7Ca%3A%22tomcat_exporter_servlet%22) war file to `metrics.war` and add it to the webapps directory of Tomcat. After restart of tomcat you should be able to access metrics via the `/metrics/` endpoint.   
+
+### Example Dockerfile 
+The following Dockerfile provides an example how you include the exporter in a Tomcat image:
+
+
+```
+FROM tomcat:9.0-jdk17-openjdk-slim
+
+ENV TOMCAT_SIMPLECLIENT_VERSION=0.12.0
+ENV TOMCAT_EXPORTER_VERSION=0.0.15
+
+RUN apt-get update && apt-get install -y curl && \
+    curl -v --fail --location https://search.maven.org/remotecontent?filepath=io/prometheus/simpleclient/${TOMCAT_SIMPLECLIENT_VERSION}/simpleclient-${TOMCAT_SIMPLECLIENT_VERSION}.jar --output /usr/local/tomcat/lib/simpleclient-${TOMCAT_SIMPLECLIENT_VERSION}.jar && \
+    curl -v --fail --location https://search.maven.org/remotecontent?filepath=io/prometheus/simpleclient_common/${TOMCAT_SIMPLECLIENT_VERSION}/simpleclient_common-${TOMCAT_SIMPLECLIENT_VERSION}.jar --output /usr/local/tomcat/lib/simpleclient_common-${TOMCAT_SIMPLECLIENT_VERSION}.jar && \
+    curl -v --fail --location https://search.maven.org/remotecontent?filepath=io/prometheus/simpleclient_hotspot/${TOMCAT_SIMPLECLIENT_VERSION}/simpleclient_hotspot-${TOMCAT_SIMPLECLIENT_VERSION}.jar --output /usr/local/tomcat/lib/simpleclient_hotspot-${TOMCAT_SIMPLECLIENT_VERSION}.jar && \
+    curl -v --fail --location https://search.maven.org/remotecontent?filepath=io/prometheus/simpleclient_servlet/${TOMCAT_SIMPLECLIENT_VERSION}/simpleclient_servlet-${TOMCAT_SIMPLECLIENT_VERSION}.jar --output /usr/local/tomcat/lib/simpleclient_servlet-${TOMCAT_SIMPLECLIENT_VERSION}.jar && \
+    curl -v --fail --location https://search.maven.org/remotecontent?filepath=io/prometheus/simpleclient_servlet_common/${TOMCAT_SIMPLECLIENT_VERSION}/simpleclient_servlet_common-${TOMCAT_SIMPLECLIENT_VERSION}.jar --output /usr/local/tomcat/lib/simpleclient_servlet_common-${TOMCAT_SIMPLECLIENT_VERSION}.jar && \
+    curl -v --fail --location https://search.maven.org/remotecontent?filepath=nl/nlighten/tomcat_exporter_client/${TOMCAT_EXPORTER_VERSION}/tomcat_exporter_client-${TOMCAT_EXPORTER_VERSION}.jar --output /usr/local/tomcat/lib/tomcat_exporter_client-${TOMCAT_EXPORTER_VERSION}.jar && \
+    curl -v --fail --location https://search.maven.org/remotecontent?filepath=nl/nlighten/tomcat_exporter_servlet/${TOMCAT_EXPORTER_VERSION}/tomcat_exporter_servlet-${TOMCAT_EXPORTER_VERSION}.war --output /usr/local/tomcat/webapps/metrics.war
+``` 
 
 ### Servlet response time metrics
 If you want servlet response time metrics you can configure the `TomcatServletMetricsFilter` by adding it to the $CATALINA_BASE/conf/web.xml as shown below. There is no need to modify already deployed applications.

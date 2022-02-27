@@ -5,7 +5,7 @@
 
     <groupId>nl.nlighten</groupId>
     <artifactId>tomcat_exporter</artifactId>
-    <version>0.0.16</version>
+    <version>0.0.16-SNAPSHOT</version>
 
     <name>Prometheus Tomcat Exporter</name>
     <url>https://github.com/nlighten/tomcat_exporter</url>

@@ -17,7 +17,7 @@ The following Tomcat related metrics are provided:
 * Database response time metrics
 
 ### Using this library
-If you are running Tomcat in the conventional non-embedded setup we recommended to add the following jars (see `pom.xml`) to the `$CATALINA_BASE/lib` directory or another directory on the Tomcat `common.loader` path.
+If you are running Tomcat in the conventional non-embedded setup we recommended to add the following jars (see `pom.xml` for the correct versions) to the `$CATALINA_BASE/lib` directory or another directory on the Tomcat `common.loader` path.
 Using the `common.loader` is important as we need to make sure that all metrics are registered using the same class loader.
 
 * [simpleclient](https://search.maven.org/#search%7Cga%7C1%7Ca%3A%22simpleclient%22)

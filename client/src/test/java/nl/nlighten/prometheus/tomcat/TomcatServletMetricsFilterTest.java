@@ -27,6 +27,7 @@ public class TomcatServletMetricsFilterTest extends AbstractTomcatMetricsTest {
     public void testServletRequestMetrics() throws Exception {
         // servlet response times
         assertThat(CollectorRegistry.defaultRegistry.getSampleValue("servlet_request_seconds_bucket", new String[]{"context", "method", "le"}, new String[]{CONTEXT_PATH, "GET", "0.01"}), is(notNullValue()));
+        try {Thread.sleep(10);} catch (InterruptedException ie) {}
         assertThat(CollectorRegistry.defaultRegistry.getSampleValue("servlet_request_seconds_bucket", new String[]{"context", "method", "le"}, new String[]{CONTEXT_PATH, "GET", "+Inf"}), is(greaterThan(0.0)));
         assertThat(CollectorRegistry.defaultRegistry.getSampleValue("servlet_request_seconds_count", new String[]{"context", "method"}, new String[]{CONTEXT_PATH, "GET"}), is(greaterThan(0.0)));
 

@@ -49,6 +49,7 @@ import java.io.IOException;
  *  </pre>
  */
 public class TomcatServletMetricsFilter implements Filter {
+    private static volatile boolean hasExecuted;
     private static final String BUCKET_CONFIG_PARAM = "buckets";
     private static Histogram servletLatency;
     private static Gauge servletConcurrentRequest;
@@ -116,12 +117,17 @@ public class TomcatServletMetricsFilter implements Filter {
                 filterChain.doFilter(servletRequest, servletResponse);
             } finally {
                 timer.observeDuration();
+                hasExecuted=true;
                 servletConcurrentRequest.labels(context).dec();
                 servletStatusCodes.labels(context, Integer.toString(getStatus((HttpServletResponse) servletResponse))).inc();
             }
         } else {
             filterChain.doFilter(servletRequest, servletResponse);
         }
+    }
+    
+    public static boolean getExecutedStatus() {
+        return hasExecuted;
     }
 
     private int getStatus(HttpServletResponse response) {
